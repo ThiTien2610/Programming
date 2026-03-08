@@ -1,0 +1,54 @@
+#include "Rational.hpp"
+#include <iostream>
+#include <numeric>
+namespace hw12
+{
+Rational::Rational(int num, int den) : m_num(num), m_den(den)
+{
+    reduce();
+}
+
+Rational& Rational::operator+=(Rational const& other)
+{
+    auto lcm = std::lcm(m_den, other.m_den);
+
+    m_num = m_num * (lcm / m_den) + other.m_num * (lcm / other.m_den);
+    m_den = lcm;
+
+    reduce();
+    return *this;
+}
+
+Rational& Rational::operator*=(Rational const& other)
+{
+    m_num *= other.m_num;
+    m_den *= other.m_den;
+
+    reduce();
+    return *this;
+}
+
+void Rational::reduce()
+{
+    if (m_den < 0)
+    {
+        m_num = -m_num;
+        m_den = -m_den;
+    }
+
+    auto gcd = std::gcd(m_num, m_den);
+
+    m_num /= gcd;
+    m_den /= gcd;
+}
+
+std::istream& operator>>(std::istream& stream, Rational& rational)
+{
+    return (stream >> rational.m_num).ignore() >> rational.m_den;
+}
+
+std::ostream& operator<<(std::ostream& stream, Rational const& rational)
+{
+    return stream << rational.m_num << '/' << rational.m_den;
+}
+}
