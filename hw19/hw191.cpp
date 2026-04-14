@@ -32,7 +32,6 @@ void printArray(T* array, int n)
     cout << '\n';
 }
 
-// Custom function object
 struct AbsCompare
 {
     bool operator()(int a, int b) const
